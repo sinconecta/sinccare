@@ -25,7 +25,10 @@ jobs:
           choco install chromedriver -y
 
       - name: Build with Maven
-        run: mvn clean test
+        env:
+          GH_TOKEN: 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
+        run: |
+          mvn clean test -Dgithub.token=$GH_TOKEN
 
       - name: Generate Allure Report
         run: mvn allure:report
