@@ -1,0 +1,45 @@
+name: Run Automated Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Install Chrome
+        run: |
+          choco install googlechrome -y
+          choco install chromedriver -y
+
+      - name: Build with Maven
+        run: mvn clean test
+
+      - name: Generate Allure Report
+        run: mvn allure:report
+
+      - name: Publish Allure Results
+        uses: allure-actions/upload@v2
+        with:
+          resultsDirectory: target/allure-results
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: allure-report
+          path: target/site/allure-maven-plugin
+
+      - name: Cleanup
+        run: mvn clean
