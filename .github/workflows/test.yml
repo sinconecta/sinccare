@@ -33,7 +33,7 @@ jobs:
       - name: Publish Allure Results
         uses: allure-actions/upload@v2
         with:
-          resultsDirectory: target/allure-results
+          resultsDirectory: allure-results
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
